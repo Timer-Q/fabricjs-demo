@@ -7,25 +7,104 @@
   .canvas-container {
     border: 1px solid #ddd;
   }
+
+  #canvas {
+     /* background: url(http://www.topscratchcards.com/images/games/888ladies/scratchcard-winning-ticket.jpg);  */
+
+    width: 531px;
+    height: 438px;
+  }
 </style>
 
 <body>
-  
-  <canvas id="canvas" width="300" height="300"></canvas>
+  <input type="checkbox" name="eraser" checked="false" id="eraser">橡皮擦
+   <canvas id="canvas"></canvas> 
+  <!-- <div id="canvas"></div> -->
 
   <script src="./lib/fabric.js"></script>
   <script>
-    var canvas = new fabric.Canvas('canvas');
+    // var canvas = new fabric.Canvas('canvas');
+    // var onChange = function (options) {
+    //   if (!options.target.eraser) {
+    //     return;
+    //   }
+    //   options.target.setCoords();
+    //   canvas.forEachObject(function (obj) {
+    //     if (!obj.eraser && options.target.intersectsWithObject(obj)) {
+    //       canvas.remove(obj);
+    //     }
+    //   });
+    // }
 
-    var rect = new fabric.Rect({
-      top: 100,
-      left: 100,
-      width: 60,
-      height: 70,
-      fill: 'red'
-    });
+    window.onload = function () {
+      // function createCanvas(parent, width, height) {
+      //   var canvas = {};
+      //   canvas.node = document.createElement('canvas');
+      //   canvas.context = canvas.node.getContext('2d');
+      //   canvas.node.width = width || 100;
+      //   canvas.node.height = height || 100;
+      //   parent.appendChild(canvas.node);
+      //   return canvas;
+      // }
 
-    canvas.add(rect);
+      // function init(container, width, height, fillColor) {
+      //   var canvas = createCanvas(container, width, height);
+      //   var ctx = canvas.context;
+      //   // define a custom fillCircle method
+      //   ctx.fillCircle = function (x, y, radius, fillColor) {
+      //     this.fillStyle = fillColor;
+      //     this.beginPath();
+      //     this.moveTo(x, y);
+      //     this.arc(x, y, radius, 0, Math.PI * 2, false);
+      //     this.fill();
+      //   };
+      //   ctx.clearTo = function (fillColor) {
+      //     ctx.fillStyle = fillColor;
+      //     ctx.fillRect(0, 0, width, height);
+      //   };
+      //   ctx.clearTo(fillColor || "#ddd");
+
+      //   // bind mouse events
+      //   canvas.node.onmousemove = function (e) {
+      //     if (!canvas.isDrawing) {
+      //       return;
+      //     }
+      //     var x = e.pageX - this.offsetLeft;
+      //     var y = e.pageY - this.offsetTop;
+      //     var radius = 10; // or whatever
+      //     var fillColor = '#ff0000';
+      //     ctx.globalCompositeOperation = 'destination-out';
+      //     ctx.fillCircle(x, y, radius, fillColor);
+      //   };
+      //   canvas.node.onmousedown = function (e) {
+      //     canvas.isDrawing = true;
+      //   };
+      //   canvas.node.onmouseup = function (e) {
+      //     canvas.isDrawing = false;
+      //   };
+      // }
+
+      // var container = document.getElementById('canvas');
+      // init(container, 531, 438, '#ddd');
+      var canvas = new fabric.Canvas('canvas', {
+        isDrawingMode: true
+      })
+      canvas.freeDrawingBrush.color = 'red'
+      canvas.freeDrawingBrush.width = '10'
+      console.log(canvas.freeDrawingBrush)
+      canvas.on('path:created',(obj) => {
+        var eraserFlag = document.getElementById('eraser').checked
+        if(eraserFlag) {
+          obj.path.globalCompositeOperation = 'destination-out'
+        }
+        console.log(canvas.getObjects())
+        canvas.renderAll()
+      })
+      var path = new fabric.Path();
+
+      canvas.add(path); // add object
+      
+    }
   </script>
 </body>
 
